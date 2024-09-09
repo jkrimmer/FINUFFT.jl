@@ -51,6 +51,11 @@ function __init__()
         include("cufinufft_simple.jl")
         determine_cuda_status()
     end
+    # use the same lock as FFTW to ensure a thread-safe planning stage
+    @require FFTW="7a1cc6ca-52ef-59f5-83cd-3a7055c09341" begin
+        using .FFTW
+        FINUFFT.finufftlock = FFTW.fftwlock
+    end
 end
 
 end # module

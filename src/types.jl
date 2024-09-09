@@ -96,6 +96,9 @@ mutable struct nufft_opts{T}
     maxbatchsize       :: Cint
     spread_nthr_atomic :: Cint
     spread_max_sp_size :: Cint
+    fftw_lock_fun      :: Ptr{Cvoid}
+    fftw_unlock_fun    :: Ptr{Cvoid}
+    fftw_lock_data     :: Ptr{Cvoid}
     nufft_opts{T}() where T <: finufftReal = new{T}()
 end
 # The above must match include/nufft_opts.h in FINUFFT.

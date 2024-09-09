@@ -1,5 +1,7 @@
 ### Guru Interfaces
 
+finufftlock = ReentrantLock()
+
 """
     p = finufft_default_opts()
     p = finufft_default_opts(dtype=Float32)
@@ -24,6 +26,13 @@ function finufft_default_opts(dtype::DataType=Float64)
                opts
                )
     end
+
+    lock_c = @cfunction(x -> lock(unsafe_pointer_to_objref(x)), Cvoid, (Ptr{Cvoid},))
+    unlock_c = @cfunction(x -> unlock(unsafe_pointer_to_objref(x)), Cvoid, (Ptr{Cvoid},))
+    
+    opts.fftw_lock_fun = lock_c
+    opts.fftw_unlock_fun = unlock_c
+    opts.fftw_lock_data = pointer_from_objref(finufftlock)
 
     return opts
 end
